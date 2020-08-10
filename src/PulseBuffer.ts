@@ -22,9 +22,11 @@ export default class PulseBuffer {
 
   public addPulse(high: number, low: number) {
 
-    this.backing = Buffer.alloc(this.backing.length + 8);
-    this.backing.writeUInt32BE(high, this.backing.length - 4);
-    this.backing.writeUInt32BE(low, this.backing.length - 8);
+    const extended = Buffer.alloc(this.backing.length + 8);
+    this.backing.copy(extended);
+    extended.writeUInt32BE(high, extended.length - 4);
+    extended.writeUInt32BE(low, extended.length - 8);
+    this.backing = extended;
   }
 
   [Symbol.iterator]() {
