@@ -1,0 +1,25 @@
+{
+  "name": "rpi-clickety",
+  "version": "0.0.1",
+  "description": "Hook up your 433Mhz remote control outlets to your raspberry pi!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "433",
+    "433Mhz",
+    "rcswitch",
+    "etekcity",
+    "rf"
+  ],
+  "author": "Alvin Lumowa",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.0.27",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "pigpio": "^3.2.3"
+  }
+}
