@@ -13,23 +13,18 @@ export default class Transmitter {
     this.transmitter = new Gpio(pin, { mode: Gpio.OUTPUT });
   }
 
-  private txWave(wave: Pigpio.GenericWaveStep[]) {
+  private txWave(wave: Pigpio.GenericWaveStep[], attempts: number) {
 
     this.sending = true;
     this.transmitter.digitalWrite(0);
     Pigpio.waveAddGeneric(wave);
-
     const waveId = Pigpio.waveCreate();
-    const attempts = 3;
 
     if(waveId >= 0){
       for(let attempt = 0; attempt < attempts; attempt++){
 
         Pigpio.waveTxSend(waveId, Pigpio.WAVE_MODE_ONE_SHOT);
-
-        while(Pigpio.waveTxBusy()){
-          console.log('sending...')
-        }
+        while(Pigpio.waveTxBusy()){}
       }
     }
 
@@ -37,7 +32,7 @@ export default class Transmitter {
     this.sending = false;
   }
 
-  public transmit(code: number = 1406211): boolean {
+  public transmit(code: number = 1406211, attempts: number = 3): boolean {
 
     //Prevent if currently sending
     if(this.sending) {
@@ -52,7 +47,6 @@ export default class Transmitter {
     const pulseLength = 190;
 
     for(var i = 0; i <= len - 1; i++){
-
 
       const mask = 0x01 << (len - 1 - i);
       const val = (code & mask) >> (len - 1 - i);
@@ -72,11 +66,11 @@ export default class Transmitter {
     wave.push({ gpioOn: pin, gpioOff: 0, usDelay: pulseLength });
     wave.push({ gpioOn: 0, gpioOff: pin, usDelay: 31 * pulseLength });
 
-    this.txWave(wave);
+    this.txWave(wave, attempts);
     return true;
   }
 
-  public transmitRaw(data: string): boolean {
+  public transmitRaw(data: string, attempts: number = 3): boolean {
 
     //Prevent if currently sending
     if(this.sending) {
@@ -92,7 +86,7 @@ export default class Transmitter {
       wave.push({ gpioOn: 0, gpioOff: pin, usDelay: low });
     }
 
-    this.txWave(wave);
+    this.txWave(wave, attempts);
     return true;
   }
 }
