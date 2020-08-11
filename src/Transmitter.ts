@@ -37,7 +37,12 @@ export default class Transmitter {
     this.sending = false;
   }
 
-  public transmit(code: number = 1406211) {
+  public transmit(code: number = 1406211): boolean {
+
+    //Prevent if currently sending
+    if(this.sending) {
+      return false;
+    }
 
     Pigpio.waveClear();
 
@@ -66,11 +71,17 @@ export default class Transmitter {
     //Add sync bit
     wave.push({ gpioOn: pin, gpioOff: 0, usDelay: pulseLength });
     wave.push({ gpioOn: 0, gpioOff: pin, usDelay: 31 * pulseLength });
-    console.table(wave);
+
     this.txWave(wave);
+    return true;
   }
 
-  public transmitRaw(data: string) {
+  public transmitRaw(data: string): boolean {
+
+    //Prevent if currently sending
+    if(this.sending) {
+      return false;
+    }
 
     const { gpio: pin } = this.transmitter;
     const timings = new PulseBuffer(Buffer.from(data, 'base64'));
@@ -82,5 +93,6 @@ export default class Transmitter {
     }
 
     this.txWave(wave);
+    return true;
   }
 }
