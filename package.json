@@ -2,9 +2,18 @@
   "name": "rpi-clickety",
   "version": "0.0.1",
   "description": "Hook up your 433Mhz remote control outlets to your raspberry pi!",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepare" : "npm run build"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alumowa/rpi-clickety.git"
   },
   "keywords": [
     "433",
@@ -21,5 +30,8 @@
   },
   "dependencies": {
     "pigpio": "^3.2.3"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
